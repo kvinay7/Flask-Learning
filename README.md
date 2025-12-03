@@ -40,7 +40,7 @@
 
 Set environment variables:
 
-### macOS / Linux:
+**macOS / Linux**:
 
 ```bash
 export FLASK_APP=flashcards.py
@@ -48,7 +48,7 @@ export FLASK_ENV=development
 flask run
 ```
 
-### Windows:
+**Windows**:
 
 ```cmd
 set FLASK_APP=app.py
