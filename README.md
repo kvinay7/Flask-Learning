@@ -12,7 +12,7 @@
 
 ---
 
-## **2. Installing Flask & Starting Project **
+## **2. Installing Flask & Starting Project**
 
 * Use a **virtual environment** (`venv` or PyCharm auto-venv).
 * Install Flask:
