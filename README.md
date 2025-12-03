@@ -76,7 +76,7 @@ flask run
 
 ---
 
-# **MODULE 2 — MODEL-TEMPLATE-VIEW PATTERN**
+# **MODULE 2 — MTV PATTERN**
 
 ## **1. Introducing MTV**
 
