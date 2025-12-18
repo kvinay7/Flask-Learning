@@ -335,7 +335,9 @@ class Book(Base):
 
 ---
 
-## 3. Creating REST APIs**
+## **3. Creating REST APIs**
+
+**Basic JSON Response**
 
 ```python
 from flask import Flask, jsonify
@@ -404,7 +406,7 @@ def delete_user(user_id):
 
 ---
 
-## **ORM Inside REST APIs**
+## **4. ORM Inside REST APIs**
 
 ```python
 @app.route("/users", methods=["POST"])
