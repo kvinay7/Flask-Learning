@@ -220,7 +220,7 @@ finally:
 
 ---
 
-## **4. CRUD Operations with ORM**
+## **4. CRUD Operations**
 
 **CREATE**
 
