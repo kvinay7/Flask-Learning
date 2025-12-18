@@ -144,3 +144,248 @@ def show(id):
   
 ---
 
+# **MODULE 3 — ORM**
+
+## **1. What is ORM?**
+
+ORM is a technique that lets:
+
+* Represent **database tables as Python classes**
+* Represent **rows as Python objects**
+* Interact with the database using **Python code instead of SQL**
+
+| ORM Concept    | Meaning                       |
+| -------------- | ----------------------------- |
+| Entity / Model | Python class mapped to table  |
+| Table          | Database table                |
+| Column         | Table column                  |
+| Primary Key    | Unique row identifier         |
+| Session        | Unit of work / DB interaction |
+| Query          | Fetching data                 |
+| Relationship   | Table relationships           |
+| Transaction    | Commit / rollback             |
+
+---
+
+## **2. Why ORM is Used**
+
+**Problems with Raw SQL**
+
+* SQL strings everywhere
+* Hard to maintain
+* Error-prone
+* Tightly coupled to DB vendor
+* Hard to refactor
+
+**Benefits of ORM**
+
+✔ Cleaner, readable code
+✔ Database-agnostic
+✔ Safer (prevents SQL injection)
+✔ Object-oriented design
+✔ Easier testing
+✔ Easier schema evolution
+
+---
+
+## **3. ORM in Flask (Tooling)**
+
+In Flask, ORM is usually done using:
+
+**SQLAlchemy**
+
+* Most popular Python ORM
+* Used directly OR via Flask-SQLAlchemy
+
+All ORM models inherit from a **Base class**.
+
+```bash
+pip install sqlalchemy
+```
+
+```python
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
+```
+
+---
+
+## **4. Defining an ORM Entity (Model)**
+
+**Example: User Entity**
+
+```python
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False)
+    email = Column(String(100), unique=True)
+```
+
+**Mapping Explanation**
+
+| Python    | Database |
+| --------- | -------- |
+| Class     | Table    |
+| Attribute | Column   |
+| Object    | Row      |
+
+**Column Types**
+
+| ORM Type | DB Type   |
+| -------- | --------- |
+| Integer  | INT       |
+| String   | VARCHAR   |
+| Text     | TEXT      |
+| Boolean  | BOOLEAN   |
+| Float    | FLOAT     |
+| DateTime | TIMESTAMP |
+
+---
+
+## **5. Creating Database Engine**
+
+```python
+from sqlalchemy import create_engine
+
+engine = create_engine("sqlite:///app.db")
+```
+
+Examples:
+
+```python
+sqlite:///app.db
+postgresql://user:pass@localhost/db
+mysql+pymysql://user:pass@localhost/db
+```
+
+**Creating Tables**
+
+```python
+Base.metadata.create_all(engine)
+```
+
+This generates SQL like:
+
+```sql
+CREATE TABLE users (...)
+```
+
+---
+
+## **6. What is a Session?**
+
+* A **transactional workspace**
+* Tracks objects
+* Writes changes to DB
+
+```python
+from sqlalchemy.orm import sessionmaker
+
+Session = sessionmaker(bind=engine)
+session = Session()
+
+try:
+    session.add(obj)
+    session.commit()
+except:
+    session.rollback()
+    raise
+finally:
+    session.close()
+```
+
+---
+
+## **7. CRUD Operations with ORM**
+
+---
+
+**CREATE**
+
+```python
+user = User(name="John", email="john@mail.com")
+session.add(user)
+session.commit()
+```
+
+---
+
+**READ (Query)**
+
+```python
+users = session.query(User).all()
+```
+
+Get one:
+
+```python
+user = session.query(User).filter_by(id=1).first()
+```
+
+---
+
+**UPDATE**
+
+```python
+user.name = "John Updated"
+session.commit()
+```
+
+---
+
+**DELETE**
+
+```python
+session.delete(user)
+session.commit()
+```
+
+---
+
+**Filter**
+
+```python
+session.query(User).filter(User.name == "John")
+```
+
+**Filter by**
+
+```python
+session.query(User).filter_by(name="John")
+```
+
+**Like**
+
+```python
+User.name.like("%oh%")
+```
+
+---
+
+## **8. Relationships**
+
+**One-to-Many Example**
+
+```python
+class Author(Base):
+    __tablename__ = "authors"
+    id = Column(Integer, primary_key=True)
+    books = relationship("Book", back_populates="author")
+
+class Book(Base):
+    __tablename__ = "books"
+    id = Column(Integer, primary_key=True)
+    author_id = Column(Integer, ForeignKey("authors.id"))
+    author = relationship("Author", back_populates="books")
+```
+
+---
+
