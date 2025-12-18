@@ -295,3 +295,147 @@ class Book(Base):
 
 ---
 
+# **MODULE 4 — REST API**
+
+## **1. What is REST?**
+
+**REST (Representational State Transfer)** is an architectural style for building **web services**. REST APIs allow **clients** (browser, mobile app, frontend, other services) to interact with a backend using **HTTP**.
+
+**Key Principles of REST**
+
+* Client–Server separation
+* Stateless communication
+* Resource-based URLs
+* Standard HTTP methods
+* Uses HTTP status codes
+* Data usually exchanged as **JSON**
+
+---
+
+## **2. HTTP Methods and Status Codes**
+
+| HTTP Method | CRUD   | Meaning          |
+| ----------- | ------ | ---------------- |
+| GET         | Read   | Fetch data       |
+| POST        | Create | Add new data     |
+| PUT         | Update | Replace existing |
+| PATCH       | Update | Partial update   |
+| DELETE      | Delete | Remove data      |
+
+| Code | Meaning      | When to Use       |
+| ---- | ------------ | ----------------- |
+| 200  | OK           | Successful GET    |
+| 201  | Created      | Resource created  |
+| 204  | No Content   | Successful delete |
+| 400  | Bad Request  | Invalid input     |
+| 401  | Unauthorized | Auth required     |
+| 403  | Forbidden    | No permission     |
+| 404  | Not Found    | Resource missing  |
+| 500  | Server Error | Internal error    |
+
+---
+
+## 3. Creating REST APIs**
+
+```python
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route("/ping")
+def ping():
+    return jsonify({"message": "pong"})
+```
+
+**GET**
+
+```python
+@app.route("/users", methods=["GET"])
+def get_users():
+    users = [
+        {"id": 1, "name": "John"},
+        {"id": 2, "name": "Jane"}
+    ]
+    return jsonify(users), 200
+```
+
+**GET (Path Parameter)**
+
+```python
+@app.route("/users/<int:user_id>", methods=["GET"])
+def get_user(user_id):
+    return jsonify({"id": user_id, "name": "John"}), 200
+```
+
+**POST (Create)**
+
+```python
+from flask import request
+
+@app.route("/users", methods=["POST"])
+def create_user():
+    data = request.json
+    user = {
+        "id": 1,
+        "name": data["name"]
+    }
+    return jsonify(user), 201
+```
+
+**PUT (Update)**
+
+```python
+@app.route("/users/<int:user_id>", methods=["PUT"])
+def update_user(user_id):
+    data = request.json
+    return jsonify({
+        "id": user_id,
+        "name": data["name"]
+    }), 200
+```
+
+**DELETE**
+
+```python
+@app.route("/users/<int:user_id>", methods=["DELETE"])
+def delete_user(user_id):
+    return "", 204
+```
+
+---
+
+## **ORM Inside REST APIs**
+
+```python
+@app.route("/users", methods=["POST"])
+def create_user():
+    data = request.json
+    user = User(name=data["name"], email=data["email"])
+    session.add(user)
+    session.commit()
+
+    user = session.query(User).get(user.id)
+    if not user:
+        return jsonify({"error": "User not Added"}), 404
+    return jsonify({"id": user.id}), 201
+```
+
+---
+
+## **5. Project Structure**
+
+```
+app/
+ ├── routes/
+ │    └── user_routes.py
+ ├── services/
+ │    └── user_service.py
+ ├── repositories/
+ │    └── user_repository.py
+ ├── models/
+ │    └── user.py
+ └── app.py
+```
+
+---
+
