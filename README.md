@@ -178,7 +178,7 @@ pip install sqlalchemy
 **Example: User Entity**
 
 ```python
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -198,12 +198,15 @@ class User(Base):
 * A **transactional workspace**
 * Tracks objects
 * Writes changes to DB
+* commit() writes permanently
+* flush() syncs without committing.
 
 ```python
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 engine = create_engine("sqlite:///app.db")
+Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -415,10 +418,6 @@ def create_user():
     user = User(name=data["name"], email=data["email"])
     session.add(user)
     session.commit()
-
-    user = session.query(User).get(user.id)
-    if not user:
-        return jsonify({"error": "User not Added"}), 404
     return jsonify({"id": user.id}), 201
 ```
 
