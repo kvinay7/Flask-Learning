@@ -154,6 +154,10 @@ ORM is a technique that lets:
 * Represent **rows as Python objects**
 * Interact with the database using **Python code instead of SQL**
 
+```bash
+pip install sqlalchemy
+```
+
 | ORM Concept    | Meaning                       |
 | -------------- | ----------------------------- |
 | Entity / Model | Python class mapped to table  |
@@ -167,51 +171,9 @@ ORM is a technique that lets:
 
 ---
 
-## **2. Why ORM is Used**
-
-**Problems with Raw SQL**
-
-* SQL strings everywhere
-* Hard to maintain
-* Error-prone
-* Tightly coupled to DB vendor
-* Hard to refactor
-
-**Benefits of ORM**
-
-✔ Cleaner, readable code
-✔ Database-agnostic
-✔ Safer (prevents SQL injection)
-✔ Object-oriented design
-✔ Easier testing
-✔ Easier schema evolution
-
----
-
-## **3. ORM in Flask (Tooling)**
-
-In Flask, ORM is usually done using:
-
-**SQLAlchemy**
-
-* Most popular Python ORM
-* Used directly OR via Flask-SQLAlchemy
+## **2. Defining an ORM Entity (Model)**
 
 All ORM models inherit from a **Base class**.
-
-```bash
-pip install sqlalchemy
-```
-
-```python
-from sqlalchemy.orm import declarative_base
-
-Base = declarative_base()
-```
-
----
-
-## **4. Defining an ORM Entity (Model)**
 
 **Example: User Entity**
 
@@ -250,44 +212,17 @@ class User(Base):
 
 ---
 
-## **5. Creating Database Engine**
-
-```python
-from sqlalchemy import create_engine
-
-engine = create_engine("sqlite:///app.db")
-```
-
-Examples:
-
-```python
-sqlite:///app.db
-postgresql://user:pass@localhost/db
-mysql+pymysql://user:pass@localhost/db
-```
-
-**Creating Tables**
-
-```python
-Base.metadata.create_all(engine)
-```
-
-This generates SQL like:
-
-```sql
-CREATE TABLE users (...)
-```
-
----
-
-## **6. What is a Session?**
+## **3. What is a Session?**
 
 * A **transactional workspace**
 * Tracks objects
 * Writes changes to DB
 
 ```python
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+engine = create_engine("sqlite:///app.db")
 
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -304,9 +239,7 @@ finally:
 
 ---
 
-## **7. CRUD Operations with ORM**
-
----
+## **4. CRUD Operations with ORM**
 
 **CREATE**
 
@@ -315,8 +248,6 @@ user = User(name="John", email="john@mail.com")
 session.add(user)
 session.commit()
 ```
-
----
 
 **READ (Query)**
 
@@ -330,8 +261,6 @@ Get one:
 user = session.query(User).filter_by(id=1).first()
 ```
 
----
-
 **UPDATE**
 
 ```python
@@ -339,16 +268,12 @@ user.name = "John Updated"
 session.commit()
 ```
 
----
-
 **DELETE**
 
 ```python
 session.delete(user)
 session.commit()
 ```
-
----
 
 **Filter**
 
@@ -370,7 +295,7 @@ User.name.like("%oh%")
 
 ---
 
-## **8. Relationships**
+## **5. Relationships**
 
 **One-to-Many Example**
 
