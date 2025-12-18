@@ -154,10 +154,6 @@ ORM is a technique that lets:
 * Represent **rows as Python objects**
 * Interact with the database using **Python code instead of SQL**
 
-```bash
-pip install sqlalchemy
-```
-
 | ORM Concept    | Meaning                       |
 | -------------- | ----------------------------- |
 | Entity / Model | Python class mapped to table  |
@@ -171,9 +167,13 @@ pip install sqlalchemy
 
 ---
 
-## **2. Defining an ORM Entity (Model)**
+## **2. Defining an Entity**
 
 All ORM models inherit from a **Base class**.
+
+```bash
+pip install sqlalchemy
+```
 
 **Example: User Entity**
 
@@ -187,28 +187,9 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False)
+    name = Column(Text, nullable=False)
     email = Column(String(100), unique=True)
 ```
-
-**Mapping Explanation**
-
-| Python    | Database |
-| --------- | -------- |
-| Class     | Table    |
-| Attribute | Column   |
-| Object    | Row      |
-
-**Column Types**
-
-| ORM Type | DB Type   |
-| -------- | --------- |
-| Integer  | INT       |
-| String   | VARCHAR   |
-| Text     | TEXT      |
-| Boolean  | BOOLEAN   |
-| Float    | FLOAT     |
-| DateTime | TIMESTAMP |
 
 ---
 
@@ -255,7 +236,7 @@ session.commit()
 users = session.query(User).all()
 ```
 
-Get one:
+**Get**:
 
 ```python
 user = session.query(User).filter_by(id=1).first()
