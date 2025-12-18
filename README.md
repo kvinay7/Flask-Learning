@@ -236,7 +236,7 @@ session.commit()
 users = session.query(User).all()
 ```
 
-**Get**:
+**GET**:
 
 ```python
 user = session.query(User).filter_by(id=1).first()
