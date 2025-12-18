@@ -10,7 +10,7 @@
 
 ---
 
-## **2. Installing Flask & Starting Project**
+## **2. Installing Flask**
 
 * Use a **virtual environment** (`venv` or PyCharm auto-venv).
 * Install Flask:
@@ -21,7 +21,7 @@
 
 ---
 
-## **3. Creating First Web Page**
+## **3. Creating Web Page**
 
 * Minimal Flask application:
 
@@ -36,7 +36,7 @@
 
 ---
 
-## **4. Running Flask Development Server**
+## **4. Running Flask**
 
 Set environment variables:
 
@@ -133,7 +133,7 @@ def show(id):
 
 ---
 
-## **5. Building Links Using url_for**
+## **5. Building Links**
 
 ```html
 <a href="{{ url_for('show', id=3) }}">Card 3</a>
@@ -312,7 +312,7 @@ class Book(Base):
 
 ---
 
-## **2. HTTP Methods and Status Codes**
+## **2. HTTP Terminology**
 
 | HTTP Method | CRUD   | Meaning          |
 | ----------- | ------ | ---------------- |
